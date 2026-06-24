@@ -353,65 +353,57 @@
       }
 
       /* ── BIO ── */
-      #bio .section-inner {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 64px;
-        align-items: start;
+      #bio {
+        position: relative;
+        isolation: isolate;
+        min-height: 80svh;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-start;
+        padding: 100px 24px;
+
+        @media (min-width: 1200px) {
+          min-height: 100svh;
+          padding: 80px 24px;
+        }
       }
 
-      .bio-text h2 {
-        margin-bottom: 16px;
-        font-size: clamp(24px, 3vw, 40px);
+      #bio picture {
+        display: contents;
       }
+
+      .bio-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 30%;
+        display: block;
+      }
+
+      #bio .section-inner {
+        position: relative;
+        z-index: 1;
+        max-width: 520px;
+        text-align: center;
+      }
+
+      #bio h2 {
+        color: #1a1208;
+        margin-bottom: 16px;
+        font-size: clamp(28px, 3vw, 48px);
+      }
+
       .bio-text p:not(.section-label) {
-        color: var(--ink-muted);
-        font-size: 15px;
+        color: #3e3028;
+        font-size: 17px;
         line-height: 1.75;
         margin-bottom: 14px;
       }
 
       .bio-text p:last-child {
         margin-bottom: 0;
-      }
-
-      .bio-photo-wrap {
-        position: relative;
-      }
-
-      .bio-photo-wrap img {
-        width: 100%;
-        aspect-ratio: 3/4;
-        object-fit: cover;
-        object-position: center top;
-        display: block;
-        filter: brightness(0.85) saturate(0.75);
-      }
-
-      /* thin maroon border offset */
-      .bio-photo-wrap::after {
-        content: "";
-        position: absolute;
-        inset: 10px -10px -10px 10px;
-        border: 0.5px solid var(--maroon);
-        pointer-events: none;
-        z-index: -1;
-      }
-
-      /* placeholder for when bio photo not yet uploaded */
-      .bio-photo-placeholder {
-        width: 100%;
-        aspect-ratio: 3/4;
-        background: #141210;
-        border: 0.5px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: var(--sans);
-        font-size: 10px;
-        letter-spacing: 2px;
-        color: var(--ink-dim);
-        text-transform: uppercase;
       }
 
       /* ── SHOWS ── */
@@ -535,18 +527,6 @@
           padding: 16px 20px;
         }
         .nav-links {
-          display: none;
-        }
-
-        #bio .section-inner {
-          grid-template-columns: 1fr;
-          gap: 40px;
-        }
-
-        .bio-photo-wrap {
-          order: -1;
-        }
-        .bio-photo-wrap::after {
           display: none;
         }
 
@@ -904,12 +884,11 @@
             raw, grounded, and hard to forget.
           </p>
         </div>
-
-        <div class="bio-photo-wrap">
-          <!-- ✏️ Swap src to bio photo when received (candle or snow photo) -->
-          <img src="bio.jpg" alt="Abigail Royce seated among candlesticks" />
-        </div>
       </div>
+      <picture>
+        <source media="(min-width: 1200px)" srcset="bio3.jpg" />
+        <img class="bio-img" src="bio2.jpg" alt="Abigail Royce" />
+      </picture>
     </section>
 
     <!-- SHOWS -->
