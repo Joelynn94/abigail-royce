@@ -977,10 +977,10 @@
                 Charity fundraiser for Rescue Village — free admission
               </p>
             </div>
-            
+
             <a
               class="show-cta"
-              href="https://www.facebook.com/share/p/1NwTeWCNby/
+              href="https://www.facebook.com/share/p/1NwTeWCNby/"
               target="_blank"
               rel="noopener"
               aria-label="Event details for June 26 show"
@@ -1017,9 +1017,13 @@
       document.getElementById("year").textContent = new Date().getFullYear();
 
       const nav = document.querySelector(".main-nav");
-      window.addEventListener("scroll", () => {
-        nav.classList.toggle("scrolled", window.scrollY > 60);
-      }, { passive: true });
+      window.addEventListener(
+        "scroll",
+        () => {
+          nav.classList.toggle("scrolled", window.scrollY > 60);
+        },
+        { passive: true },
+      );
     </script>
   </body>
 </html>
