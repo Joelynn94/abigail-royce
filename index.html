@@ -70,6 +70,13 @@
           rgba(10, 9, 8, 0.85) 0%,
           transparent 100%
         );
+        transition: background 0.3s ease;
+      }
+
+      .main-nav.scrolled {
+        background: rgba(10, 9, 8, 0.92);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
       }
 
       .nav-name {
@@ -1008,6 +1015,11 @@
 
     <script>
       document.getElementById("year").textContent = new Date().getFullYear();
+
+      const nav = document.querySelector(".main-nav");
+      window.addEventListener("scroll", () => {
+        nav.classList.toggle("scrolled", window.scrollY > 60);
+      }, { passive: true });
     </script>
   </body>
 </html>
