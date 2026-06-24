@@ -356,16 +356,12 @@
       #bio {
         position: relative;
         isolation: isolate;
-        min-height: 80svh;
+        min-height: 90svh;
         overflow: hidden;
         display: flex;
-        align-items: flex-start;
-        padding: 100px 24px;
-
-        @media (min-width: 1200px) {
-          min-height: 100svh;
-          padding: 80px 24px;
-        }
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 60px 24px;
       }
 
       #bio picture {
@@ -380,30 +376,95 @@
         object-fit: cover;
         object-position: center 30%;
         display: block;
+        filter: brightness(0.55) saturate(0.8);
+      }
+
+      #bio::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(
+          to bottom,
+          rgba(10, 9, 8, 0.72) 0%,
+          rgba(10, 9, 8, 0.55) 50%,
+          transparent 100%
+        );
+        pointer-events: none;
       }
 
       #bio .section-inner {
         position: relative;
-        z-index: 1;
-        max-width: 520px;
+        z-index: 2;
+        max-width: 560px;
+        margin: 0 auto;
         text-align: center;
       }
 
       #bio h2 {
-        color: #1a1208;
+        color: var(--ink);
         margin-bottom: 16px;
         font-size: clamp(28px, 3vw, 48px);
       }
 
       .bio-text p:not(.section-label) {
-        color: #3e3028;
-        font-size: 17px;
+        color: var(--warm-cream);
+        font-size: 16px;
         line-height: 1.75;
         margin-bottom: 14px;
       }
 
       .bio-text p:last-child {
         margin-bottom: 0;
+      }
+
+      @media (min-width: 480px) {
+        #bio {
+          min-height: 70svh;
+        }
+      }
+
+      /* Desktop — switch to two-column, drop the overlay */
+      @media (min-width: 1024px) {
+        #bio {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          min-height: 50svh;
+          padding: 0;
+        }
+
+        #bio::before {
+          display: none;
+        }
+
+        #bio picture {
+          display: block;
+        }
+
+        .bio-img {
+          position: relative;
+          inset: unset;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center 30%;
+          filter: brightness(0.55) saturate(0.8);
+        }
+
+        #bio .section-inner {
+          padding: 80px 60px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          max-width: none;
+          margin: 0;
+          text-align: left;
+          background: var(--page);
+        }
+
+        #bio h2 {
+          font-size: clamp(28px, 2.5vw, 48px);
+        }
       }
 
       /* ── SHOWS ── */
@@ -873,10 +934,9 @@
           <h2 id="bio-heading">Abigail Royce</h2>
 
           <p>
-            Abigail Royce is a soulful country artist from Ohio with a poet’s
-            touch and a bit of edge. Blending Americana, Folk, and Southern
-            Rock, she’s shaping a modern Midwest country sound that’s warm,
-            gritty, and honest.
+            A soulful country artist from Ohio with a poet’s touch and a bit of
+            edge. Blending Americana, Folk, and Southern Rock, she’s shaping a
+            modern Midwest country sound that’s warm, gritty, and honest.
           </p>
           <p>
             Her songs lean into vivid storytelling with a voice that’s equal
