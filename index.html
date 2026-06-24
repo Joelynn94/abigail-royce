@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Qwitcher+Grypen:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
       rel="stylesheet"
     />
 
@@ -29,15 +29,15 @@
         --ink: #e8dfd0;
         --ink-muted: #8a7a68;
         --ink-dim: #4a3c30;
-        --maroon: #a33020;
-        --maroon-lt: #d4503f;
+        --pale-blue: #466e85;
         --warm-cream: #f0e8d8;
         --navy: #14213d;
         --page: #0a0908;
         --surface: #0f0d0b;
         --border: rgba(255, 255, 255, 0.07);
+        --display: "Qwitcher Grypen", cursive;
         --serif: "Playfair Display", Georgia, serif;
-        --body: "Lora", Georgia, serif;
+        --body: "Playfair Display", Georgia, serif;
         --sans: "Inter", system-ui, sans-serif;
       }
 
@@ -164,13 +164,13 @@
       }
 
       h1 {
-        font-family: var(--serif);
-        font-size: clamp(52px, 10vw, 96px);
+        font-family: var(--display);
+        font-size: clamp(120px, 14vw, 160px);
         font-weight: 400;
-        letter-spacing: 6px;
+        letter-spacing: 2px;
         line-height: 1;
         color: var(--ink);
-        margin-bottom: 8px;
+        margin-bottom: 80px;
       }
 
       .hero-tagline {
@@ -194,8 +194,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 52px;
-        height: 52px;
+        width: 60px;
+        height: 60px;
         color: #ffffff;
         text-decoration: none;
         border: 1.5px solid rgba(255, 255, 255, 0.5);
@@ -225,8 +225,8 @@
       }
 
       .social-link svg {
-        width: 22px;
-        height: 22px;
+        width: 30px;
+        height: 30px;
         fill: #ffffff;
         flex-shrink: 0;
         pointer-events: none;
@@ -287,7 +287,7 @@
         font-size: 12px;
         letter-spacing: 3px;
         text-transform: uppercase;
-        color: var(--maroon-lt);
+        color: var(--pale-blue);
         margin-bottom: 12px;
       }
 
@@ -362,7 +362,7 @@
 
       .bio-text h2 {
         margin-bottom: 16px;
-        font-size: clamp(24px, 3vw, 34px);
+        font-size: clamp(24px, 3vw, 40px);
       }
       .bio-text p:not(.section-label) {
         color: var(--ink-muted);
@@ -447,7 +447,7 @@
         font-size: 12px;
         letter-spacing: 2px;
         text-transform: uppercase;
-        color: var(--maroon-lt);
+        color: var(--pale-blue);
         display: block;
       }
 
@@ -463,7 +463,7 @@
       }
 
       .show-venue {
-        font-family: var(--serif);
+        font-family: var(--sans);
         font-size: 18px;
         color: var(--ink);
         margin-bottom: 4px;
@@ -480,7 +480,7 @@
         font-family: var(--body);
         font-style: italic;
         font-size: 14px;
-        color: var(--maroon-lt);
+        color: var(--pale-blue);
         margin-top: 4px;
       }
 
@@ -489,8 +489,8 @@
         font-size: 12px;
         letter-spacing: 1.5px;
         text-transform: uppercase;
-        color: var(--maroon-lt);
-        border: 0.5px solid var(--maroon);
+        color: var(--pale-blue);
+        border: 0.5px solid var(--pale-blue);
         padding: 9px 18px;
         text-decoration: none;
         border-radius: 1px;
@@ -501,7 +501,7 @@
       }
 
       .show-cta:hover {
-        background: var(--maroon);
+        background: var(--pale-blue);
         color: var(--ink);
       }
 
@@ -592,9 +592,7 @@
       <div class="hero-vignette" aria-hidden="true"></div>
 
       <div class="hero-content">
-        <p class="eyebrow">Singer · Songwriter</p>
         <h1>Abigail<br />Royce</h1>
-        <p class="hero-tagline">**your tagline here**</p>
 
         <nav class="social-row" aria-label="Social media links">
           <!-- Spotify -->
@@ -894,19 +892,16 @@
           <p class="section-label">About</p>
           <h2 id="bio-heading">Abigail Royce</h2>
 
-          <!-- ✏️ Replace this with Abigail's bio when received -->
-          <p>**TOOK FROM SPOTIFY FOR NOW**</p>
           <p>
-            Abigail Royce is a sultry, soulful country artist with a poet's
-            heart and a restless spirit. Raised in the Midwest on country
-            classics and slow-burning heartbreak songs, her music is equal parts
-            tenderness and grit.
+            Abigail Royce is a soulful country artist from Ohio with a poet’s
+            touch and a bit of edge. Blending Americana, Folk, and Southern
+            Rock, she’s shaping a modern Midwest country sound that’s warm,
+            gritty, and honest.
           </p>
           <p>
-            Her sound blends Americana, outlaw country, and Southern rock
-            influences — bringing vivid storytelling, honey vocals, and raw
-            emotion. Whether she's singing about love lost or dreams set ablaze,
-            her music is intimate, untamed, and unforgettable.
+            Her songs lean into vivid storytelling with a voice that’s equal
+            parts honey and smoke. She turns real life into song in a way that’s
+            raw, grounded, and hard to forget.
           </p>
         </div>
 
