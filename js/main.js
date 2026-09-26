@@ -61,10 +61,37 @@ function renderFundingMeter(raised) {
 }
 
 /**
- * TODO: Replace with a real fetch once the Stripe totals endpoint exists.
- * Planned shape: GET /api/funding -> { raised: number }. The endpoint should
- * read a cached total rather than querying Stripe on every page load, and the
- * Stripe secret key must never reach the client.
+ * Marks capped tiers as sold out or updates their remaining count.
+ * Expects remaining keys "collector" and "private-performance" from
+ * the /api/funding response.
+ * @param {Record<string, number>} remaining
+ */
+function renderSoldOutStates(remaining) {
+  document.querySelectorAll("[data-tier-id]").forEach((row) => {
+    const id = row.dataset.tierId;
+    const count = remaining[id];
+    if (count === undefined) return;
+
+    const limitEl = row.querySelector(".tier-limit");
+    if (count === 0) {
+      row.classList.add("row--sold-out");
+      const btn = row.querySelector(".btn");
+      if (btn) {
+        btn.textContent = "Sold Out";
+        btn.setAttribute("aria-disabled", "true");
+        btn.removeAttribute("href");
+      }
+      if (limitEl) limitEl.textContent = "Sold out";
+    } else {
+      if (limitEl) limitEl.textContent = `${count} remaining`;
+    }
+  });
+}
+
+/**
+ * Fetches the cached funding total from /api/funding (written every 15 min
+ * by the sync-funding Netlify function) and paints the meter. Falls back
+ * silently to the data-meter placeholder if the endpoint is unavailable.
  */
 async function loadFundingTotal() {
   const meter = document.querySelector("[data-meter]");
@@ -72,6 +99,20 @@ async function loadFundingTotal() {
 
   const placeholder = Number(meter.dataset.meter);
   renderFundingMeter(placeholder);
+
+  try {
+    const res = await fetch("/api/funding");
+    if (!res.ok) return;
+    const data = await res.json();
+    if (typeof data.raised === "number") {
+      renderFundingMeter(data.raised);
+    }
+    if (data.remaining) {
+      renderSoldOutStates(data.remaining);
+    }
+  } catch {
+    // Keep placeholder on network error
+  }
 }
 
 renderCurrentYear();
