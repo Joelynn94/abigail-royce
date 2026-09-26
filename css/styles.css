@@ -1,0 +1,922 @@
+/* ============================================================
+   Abigail Royce — Design System
+   ------------------------------------------------------------
+   1. Tokens
+   2. Reset & base
+   3. Typography
+   4. Layout primitives
+   5. Components
+   6. Page-specific
+   7. Responsive
+   8. Reduced motion
+   ============================================================ */
+
+/* ============================================================
+   1. TOKENS
+   ============================================================ */
+
+:root {
+  /* ── Surfaces ── */
+  --page: #0a0908;
+  --surface: #0f0d0b;
+
+  /* ── Ink (foreground scale, lightest → darkest) ── */
+  --ink: #e8dfd0;
+  --warm-cream: #f0e8d8;
+  --ink-muted: #8a7a68;
+  --ink-dim: #4a3c30;
+
+  /* ── Accent ── */
+  --accent: #466e85;
+  --navy: #14213d; /* in the palette, not currently used */
+
+  /* ── Lines & overlays ── */
+  --hairline: 0.5px;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --scrim: rgba(10, 9, 8, 0.85);
+
+  /* ── Type families ──
+     NOTE: the previous --sans was "Inter", which was never loaded by the
+     font <link>, so it silently fell back to system-ui. Montserrat *was*
+     loaded but unused. Switched to Montserrat, which is almost certainly
+     the original intent. Revert this one line to go back to system fonts. */
+  --display: "Qwitcher Grypen", cursive;
+  --serif: "Playfair Display", Georgia, serif;
+  --body: "Playfair Display", Georgia, serif;
+  --sans: "Montserrat", system-ui, -apple-system, sans-serif;
+
+  /* ── Type scale ── */
+  --text-2xs: 0.6875rem; /* 11px */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.8125rem; /* 13px */
+  --text-md: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.375rem; /* 22px */
+  --text-2xl: 2.125rem; /* 34px */
+  --text-heading: clamp(1.75rem, 4vw, 2.5rem);
+  --text-heading-lg: clamp(1.75rem, 3vw, 3rem);
+  --text-display: clamp(7.5rem, 14vw, 10rem);
+
+  /* ── Line height ── */
+  --leading-tight: 1.15;
+  --leading-snug: 1.4;
+  --leading-body: 1.75;
+
+  /* ── Letter spacing ── */
+  --track-tight: 0.5px;
+  --track: 1.5px;
+  --track-wide: 2px;
+  --track-wider: 3px;
+
+  /* ── Space scale ── */
+  --space-3xs: 0.25rem; /* 4px */
+  --space-2xs: 0.5rem; /* 8px */
+  --space-xs: 0.75rem; /* 12px */
+  --space-sm: 1rem; /* 16px */
+  --space-md: 1.5rem; /* 24px */
+  --space-lg: 2.5rem; /* 40px */
+  --space-xl: 3.75rem; /* 60px */
+  --space-2xl: 5rem; /* 80px */
+
+  /* ── Radii ── */
+  --radius-sharp: 1px;
+  --radius-md: 12px;
+  --radius-full: 999px;
+
+  /* ── Motion ── */
+  --dur-fast: 0.15s;
+  --dur: 0.2s;
+  --dur-slow: 0.3s;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Measure ── */
+  --measure: 760px;
+  --measure-narrow: 560px;
+  --gutter: var(--space-md);
+}
+
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: var(--text-lg);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+
+/* Single global focus ring.
+   Replaces the old .social-link rule, which referenced an undefined
+   --maroon-lt and therefore rendered no visible focus indicator at all. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sharp);
+}
+
+/* ============================================================
+   3. TYPOGRAPHY
+   ============================================================ */
+
+h1 {
+  font-family: var(--display);
+  font-size: var(--text-display);
+  font-weight: 400;
+  letter-spacing: var(--track-wide);
+  line-height: 1;
+  color: var(--ink);
+}
+
+h2 {
+  font-family: var(--serif);
+  font-size: var(--text-heading);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--ink);
+  margin-bottom: var(--space-lg);
+}
+
+h3 {
+  font-family: var(--sans);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  color: var(--ink);
+}
+
+/* Small tracked-out label that sits above a heading. */
+.section-label {
+  font-family: var(--sans);
+  font-size: var(--text-xs);
+  letter-spacing: var(--track-wider);
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: var(--space-xs);
+}
+
+/* Long-form editorial copy.
+   :where() zeroes out .prose's specificity, so these are element-level
+   defaults (0,0,1) that ANY explicit class on a child overrides. Without it
+   `.prose p` (0,1,1) silently beat single-class utilities like
+   .section-label and .text-muted. */
+:where(.prose) p {
+  color: var(--warm-cream);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  margin-bottom: var(--space-sm);
+}
+
+:where(.prose) p:last-child {
+  margin-bottom: 0;
+}
+
+.prose-lead {
+  font-style: italic;
+  font-size: var(--text-xl);
+  color: var(--ink);
+  line-height: var(--leading-snug);
+}
+
+.text-muted {
+  color: var(--ink-muted);
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ============================================================
+   4. LAYOUT PRIMITIVES
+   ============================================================ */
+
+.section {
+  padding: var(--space-2xl) var(--gutter);
+}
+
+/* --surface tints the band and draws its opening hairline. Add --edged when
+   the next block does not draw its own top line; the footer already does, so
+   a surface section directly above it should stay unedged. */
+.section--surface {
+  background: var(--surface);
+  border-top: var(--hairline) solid var(--border);
+}
+
+.section--edged {
+  border-bottom: var(--hairline) solid var(--border);
+}
+
+.section--tight {
+  padding-top: var(--space-lg);
+}
+
+.section-inner {
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+.section-inner--narrow {
+  max-width: var(--measure-narrow);
+}
+
+/* Centres inline text AND block children that carry their own max-width,
+   such as .player-wrap. text-align alone does not do the second part. */
+.section-inner--center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Centred sections sit tighter under their heading. 24px snaps to the space
+   scale; the original hard-coded 28px. */
+.section-inner--center h2 {
+  margin-bottom: var(--space-md);
+}
+
+/* Header block for interior pages, which have no hero to sit under the
+   fixed nav. */
+.page-header {
+  padding: calc(var(--space-2xl) + var(--space-lg)) var(--gutter)
+    var(--space-lg);
+  border-bottom: var(--hairline) solid var(--border);
+}
+
+.page-header h1 {
+  font-family: var(--serif);
+  font-size: var(--text-heading-lg);
+  letter-spacing: normal;
+  line-height: var(--leading-tight);
+  margin-bottom: var(--space-sm);
+}
+
+/* Hairline-divided vertical list. Shows and support tiers both use it. */
+.rule-list {
+  display: flex;
+  flex-direction: column;
+  border-top: var(--hairline) solid var(--border);
+}
+
+.rule-list > * {
+  border-bottom: var(--hairline) solid var(--border);
+}
+
+/* ============================================================
+   5. COMPONENTS
+   ============================================================ */
+
+/* ── Buttons & links ───────────────────────────────────────── */
+
+.btn {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: var(--text-xs);
+  letter-spacing: var(--track);
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 9px 18px;
+  border: var(--hairline) solid var(--accent);
+  border-radius: var(--radius-sharp);
+  color: var(--accent);
+  background: transparent;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.btn:hover {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+.btn--solid {
+  background: var(--accent);
+  color: var(--ink);
+  padding: 13px 28px;
+}
+
+.btn--solid:hover {
+  background: transparent;
+  color: var(--accent);
+}
+
+.btn--quiet {
+  border-color: var(--border);
+  color: var(--ink-muted);
+}
+
+.btn--quiet:hover {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--border-strong);
+}
+
+.btn[aria-disabled="true"] {
+  border-color: var(--border);
+  color: var(--ink-dim);
+  pointer-events: none;
+}
+
+/* ── Navigation ────────────────────────────────────────────── */
+
+.main-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px var(--space-lg);
+  background: linear-gradient(to bottom, var(--scrim) 0%, transparent 100%);
+  transition: background var(--dur-slow) var(--ease);
+}
+
+.main-nav.is-scrolled,
+.main-nav--solid {
+  background: rgba(10, 9, 8, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.nav-name {
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: var(--track-wider);
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  opacity: 0.85;
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--sans);
+  font-size: var(--text-xs);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+
+.nav-links a:hover,
+.nav-links a[aria-current="page"] {
+  color: var(--ink);
+}
+
+/* ── Hero ──────────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 100px;
+}
+
+.hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: brightness(0.55) saturate(0.8);
+}
+
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(10, 9, 8, 0.3) 0%,
+      transparent 30%,
+      transparent 50%,
+      rgba(10, 9, 8, 0.7) 80%,
+      rgba(10, 9, 8, 0.97) 100%
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 40%,
+      rgba(10, 9, 8, 0.45) 100%
+    );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 0 var(--gutter);
+}
+
+.hero-content h1 {
+  margin-bottom: var(--space-2xl);
+}
+
+/* ── Social icon buttons ───────────────────────────────────── */
+
+.social-row {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  color: #fff;
+  text-decoration: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.45);
+  flex-shrink: 0;
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+  transition:
+    border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.social-link:hover {
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.08);
+}
+
+.social-link svg {
+  width: 30px;
+  height: 30px;
+  fill: #fff;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* ── Scroll hint ───────────────────────────────────────────── */
+
+.scroll-hint {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.35;
+}
+
+.scroll-hint span {
+  font-family: var(--sans);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--track-wider);
+  text-transform: uppercase;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--ink), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scaleY(1.1);
+  }
+}
+
+/* ── Player & streaming links ──────────────────────────────── */
+
+.player-wrap {
+  width: 100%;
+  max-width: var(--measure-narrow);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: var(--hairline) solid var(--border);
+}
+
+.player-wrap iframe {
+  width: 100%;
+  border: none;
+}
+
+.stream-links {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+/* ── Show / tier row ───────────────────────────────────────── */
+
+.row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: var(--space-md);
+  align-items: center;
+  padding: 28px 0;
+}
+
+.row-marker {
+  text-align: center;
+}
+
+.row-marker .marker-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: var(--text-xs);
+  letter-spacing: var(--track-wide);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.row-marker .marker-value {
+  display: block;
+  font-family: var(--serif);
+  font-size: var(--text-2xl);
+  color: var(--ink);
+  line-height: 1;
+}
+
+.row-title {
+  font-family: var(--sans);
+  font-size: var(--text-lg);
+  color: var(--ink);
+  margin-bottom: var(--space-3xs);
+}
+
+.row-meta {
+  font-family: var(--sans);
+  font-size: var(--text-sm);
+  letter-spacing: var(--track-tight);
+  color: var(--ink-muted);
+}
+
+.row-note {
+  font-family: var(--body);
+  font-style: italic;
+  font-size: var(--text-md);
+  color: var(--accent);
+  margin-top: var(--space-3xs);
+}
+
+/* Tier rows align to the top — their content is taller than a show row —
+   and need a wider marker column to fit a price like "$1,000". */
+.row--tier {
+  grid-template-columns: 92px 1fr auto;
+  align-items: start;
+}
+
+.row--tier .row-marker {
+  text-align: left;
+  padding-top: 2px;
+}
+
+.row--tier .marker-value {
+  font-size: var(--text-xl);
+}
+
+/* Applied when a limited tier is exhausted; pair with
+   aria-disabled="true" on the button. */
+.row--sold-out {
+  opacity: 0.5;
+}
+
+.reward-list {
+  list-style: none;
+  margin-top: var(--space-2xs);
+}
+
+.reward-list li {
+  position: relative;
+  padding-left: var(--space-sm);
+  font-family: var(--sans);
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--ink-muted);
+  margin-bottom: var(--space-3xs);
+}
+
+.reward-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 5px;
+  height: var(--hairline);
+  background: var(--ink-dim);
+}
+
+.tier-limit {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--track);
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  border: var(--hairline) solid var(--border);
+  border-radius: var(--radius-sharp);
+  padding: 3px 8px;
+  margin-top: var(--space-2xs);
+}
+
+/* ── Funding meter ─────────────────────────────────────────── */
+
+.meter {
+  margin: 0 auto;
+  max-width: var(--measure-narrow);
+  text-align: center;
+}
+
+.meter-amount {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 7vw, 3.75rem);
+  line-height: 1;
+  color: var(--ink);
+}
+
+.meter-goal {
+  font-family: var(--sans);
+  font-size: var(--text-sm);
+  letter-spacing: var(--track-tight);
+  color: var(--ink-muted);
+  margin-top: var(--space-2xs);
+}
+
+.meter-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: var(--radius-full);
+  margin: var(--space-md) 0 var(--space-xs);
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  border-radius: var(--radius-full);
+  transition: width 0.8s var(--ease);
+}
+
+.meter-note {
+  font-family: var(--sans);
+  font-size: var(--text-xs);
+  letter-spacing: var(--track-tight);
+  color: var(--ink-dim);
+}
+
+/* ── Footer ────────────────────────────────────────────────── */
+
+footer {
+  padding: var(--space-lg) var(--gutter);
+  text-align: center;
+  border-top: var(--hairline) solid var(--border);
+}
+
+footer p {
+  font-family: var(--sans);
+  font-size: var(--text-xs);
+  letter-spacing: var(--track);
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+footer a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: var(--ink);
+}
+
+/* ============================================================
+   6. PAGE-SPECIFIC
+   ============================================================ */
+
+/* ── Bio: image behind copy on mobile, split on desktop ────── */
+
+#bio {
+  position: relative;
+  isolation: isolate;
+  min-height: 90svh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: var(--space-xl) var(--gutter);
+}
+
+#bio picture {
+  display: contents;
+}
+
+.bio-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: brightness(0.55) saturate(0.8);
+}
+
+#bio::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 9, 8, 0.72) 0%,
+    rgba(10, 9, 8, 0.55) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+#bio .section-inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--measure-narrow);
+  margin: 0 auto;
+  text-align: center;
+}
+
+#bio h2 {
+  margin-bottom: var(--space-sm);
+  font-size: var(--text-heading-lg);
+}
+
+/* ── Thank-you confirmation ────────────────────────────────── */
+
+.confirmation {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-2xl) var(--gutter);
+}
+
+.confirmation h1 {
+  font-family: var(--serif);
+  font-size: var(--text-heading-lg);
+  letter-spacing: normal;
+  line-height: var(--leading-tight);
+  margin-bottom: var(--space-sm);
+}
+
+.confirmation .prose {
+  max-width: 46ch;
+  margin: 0 auto var(--space-lg);
+}
+
+/* ============================================================
+   7. RESPONSIVE
+   ============================================================ */
+
+@media (min-width: 500px) {
+  #bio {
+    min-height: 60svh;
+  }
+}
+
+@media (min-width: 1200px) {
+  #bio {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 50svh;
+    padding: 0;
+  }
+
+  #bio::before {
+    display: none;
+  }
+
+  #bio picture {
+    display: block;
+  }
+
+  .bio-img {
+    position: relative;
+    inset: unset;
+  }
+
+  #bio .section-inner {
+    padding: var(--space-2xl) var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: none;
+    margin: 0;
+    text-align: left;
+    background: var(--page);
+  }
+}
+
+@media (max-width: 640px) {
+  .main-nav {
+    padding: var(--space-sm) 20px;
+  }
+
+  /* Section anchors are hidden on small screens, as before. The Support
+     link points off-page, so it stays reachable. */
+  .nav-links li:not(.nav-cta) {
+    display: none;
+  }
+
+  .row {
+    grid-template-columns: 56px 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .row--tier {
+    grid-template-columns: 76px 1fr;
+  }
+
+  .row .btn {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: var(--space-xs);
+  }
+}
+
+/* ============================================================
+   8. REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .scroll-line {
+    animation: none;
+  }
+
+  .meter-fill {
+    transition: none;
+  }
+
+  .social-link:hover {
+    transform: none;
+  }
+}
